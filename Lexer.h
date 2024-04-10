@@ -54,7 +54,9 @@ public:
   llvm::StringRef GetText() const { return Text; }
 
   [[nodiscard]] bool Is(TokenKind K)const { return GetKind() == K; }
-
+  template<TokenKind K>
+  [[nodiscard]] bool Is()const { return GetKind() == K; }
+  
   template<typename ...Ts>
   [[nodiscard]] bool IsOneOf(TokenKind K1,Ts ...ts)const {
       if constexpr  (sizeof...(ts) > 0) {

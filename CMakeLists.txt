@@ -17,6 +17,8 @@ set(LLVM_LINK_COMPONENTS
 
 add_llvm_tool(llvm-MLB
   Lexer.cpp
+  AST.cpp
+  Parser.cpp
   )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Haiku")
