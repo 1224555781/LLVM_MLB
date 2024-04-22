@@ -6,25 +6,24 @@
 
 #include "AST.h"
 #include "Lexer.h"
-
 #include "llvm/Support/raw_ostream.h"
 
 
 class Parser {
-  Lexer lex_;
-  Token token;
-  bool HasError;
+  MLB::Lexer lex_;
+  MLB::Token token;
+  unsigned char bHasError:1 ;
 
   void ReportError() {
     llvm::errs() << "Error: Unexpected token: " << token.GetText() << "\n";
-    HasError = true;
+    bHasError = true;
   }
 
   void Advance() {
     lex_.Next(token);
   }
 
-  bool Expect(Token::TokenKind Kind) {
+  bool Expect(MLB::Token::TokenKind Kind) {
     if (token.Is(Kind)) {
       ReportError();
       return true;
@@ -32,22 +31,26 @@ class Parser {
     return false;
   }
 
-  bool Consume(Token::TokenKind Kind) {
+  bool Consume(MLB::Token::TokenKind Kind) {
     if (Expect(Kind)) {
       return true;
     }
     Advance();
     return false;
   }
-  
+
+  MLB::AST* ParseCalc();
+  MLB::Expr* ParseExpr();
+  MLB::Expr* ParseTerm();
+  MLB::Expr* ParseFactory();
   
 public:
-  Parser(Lexer const& lexer)
-    :lex_(lexer),HasError(false) {
+  Parser(MLB::Lexer const& lexer)
+    :lex_(lexer),bHasError(false) {
     Advance();
   }
-
-  AST* Parse();
+bool HasError(){return bHasError;}
+  MLB::AST* Parse();
 };
 
 #endif

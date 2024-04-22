@@ -1,25 +1,25 @@
 #ifndef LEXER_H
 #define LEXER_H
 #endif
-
 #include "llvm/ADT/StringRef.h"
+namespace MLB {
+
 
 
 namespace charinfo {
 LLVM_READNONE inline bool IsWhiteSpace(char c) {
-    return c == ' ' || 
-           c == '\t'||
-           c == '\n'||
-           c == '\v'||
-           c == '\f' || c == '\r';
-  }
+  return c == ' ' || 
+         c == '\t'||
+         c == '\n'||
+         c == '\v'||
+         c == '\f' || c == '\r';
+}
 LLVM_READNONE inline bool IsDigit(char c) { return c >= '0' && c <= '9'; }
 
 LLVM_READNONE inline bool IsLetter(char c) {return (c >= 'a' && c <= 'z') || (c >='A'&&c <= 'Z');}
 
 }
 
-class Lexer;
 
 class Token {
   friend class Lexer;
@@ -59,12 +59,12 @@ public:
   
   template<typename ...Ts>
   [[nodiscard]] bool IsOneOf(TokenKind K1,Ts ...ts)const {
-      if constexpr  (sizeof...(ts) > 0) {
-        return Is(K1) || IsOneOf(ts...);
-      } else if constexpr (sizeof...(ts) == 0) {
-        return Is(K1);
-      }
-      return false;
+    if constexpr  (sizeof...(ts) > 0) {
+      return Is(K1) || IsOneOf(ts...);
+    } else if constexpr (sizeof...(ts) == 0) {
+      return Is(K1);
+    }
+    return false;
   }
 
 };
@@ -85,3 +85,4 @@ public:
 private:
   void FromToken(Token &Result, char const *TokEnd, Token::TokenKind Kind);
 };
+}

@@ -1,17 +1,6 @@
 #include "Lexer.h"
 
-int main()
-{
-    Token T;
-    T.SetKind(Token::ident);
-    bool bIs = T.IsOneOf(Token::ident, Token::comma);
-
-    
-    system("pause");
-    return 0; 
-}
-
-void Lexer::Next(Token &token) {
+void MLB::Lexer::Next(Token &token) {
   while (*BufferPtr && charinfo::IsWhiteSpace(*BufferPtr)) {
     ++BufferPtr;
   }
@@ -39,9 +28,9 @@ void Lexer::Next(Token &token) {
   } else {
     switch (*BufferPtr) {
 #define CASE(ch, tok)                                                          \
-  case ch:                                                                     \
-    FromToken(token, BufferPtr + 1, tok);                                      \
-    break
+case ch:                                                                     \
+FromToken(token, BufferPtr + 1, tok);                                      \
+break
       CASE('+', Token::plus);
       CASE('-', Token::minus);
       CASE('*', Token::star);
@@ -57,8 +46,8 @@ void Lexer::Next(Token &token) {
   }
 }
 
-void Lexer::FromToken(Token &Result, char const *TokEnd,
-    Token::TokenKind Kind) {
+void MLB::Lexer::FromToken(Token &Result, char const *TokEnd,
+                           Token::TokenKind Kind) {
   Result.SetKind(Kind);
   Result.SetText(llvm::StringRef(BufferPtr, TokEnd - BufferPtr));
   BufferPtr = TokEnd;
